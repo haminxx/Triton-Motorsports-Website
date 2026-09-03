@@ -29,6 +29,7 @@ import {
   unlockBackgroundVideosFromUserGesture,
   unregisterMobileBackgroundVideo,
 } from "@/lib/mobile-video-unlock";
+import { submitContactViaWeb3Forms } from "@/lib/web3forms";
 
 /** Shared cream field surface — ~70% opacity over blurred video + inset depth. */
 const fieldSurface =
@@ -247,6 +248,7 @@ export default function ContactPage() {
   const [submitState, setSubmitState] = useState<
     "idle" | "loading" | "success"
   >("idle");
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const showBudgetCheckbox =
     inquiryFocus !== null && inquiryFocus !== "Other";
@@ -319,6 +321,7 @@ export default function ContactPage() {
     event.preventDefault();
     if (submitState === "loading" || submitState === "success") return;
 
+    const attachmentNames = attachments.map((item) => item.file.name);
     const payload: ContactSubmissionPayload = {
       firstName,
       lastName,
@@ -329,15 +332,35 @@ export default function ContactPage() {
       budgetAllocated: showBudgetCheckbox ? budgetAllocated : null,
       timeframe,
       message,
-      attachmentNames: attachments.map((item) => item.file.name),
+      attachmentNames,
       privacyAgreed,
       createdAt: new Date().toISOString(),
     };
 
+    setSubmitError(null);
     setSubmitState("loading");
-    // UI-only stub until Firestore + Storage are wired.
-    await new Promise((resolve) => setTimeout(resolve, 900));
-    console.info("[contact] submission ready for Firestore:", payload);
+
+    const result = await submitContactViaWeb3Forms({
+      firstName,
+      lastName,
+      organization,
+      email,
+      organizationType,
+      inquiryFocus,
+      budgetAllocated: showBudgetCheckbox ? budgetAllocated : null,
+      timeframe,
+      message,
+      attachmentNames,
+      privacyAgreed,
+    });
+
+    if (!result.ok) {
+      console.error("[contact] Web3Forms error:", result.error, payload);
+      setSubmitError(result.error);
+      setSubmitState("idle");
+      return;
+    }
+
     setSubmitState("success");
   }
 
@@ -715,6 +738,15 @@ export default function ContactPage() {
                           </Link>
                         </span>
                       </label>
+
+                      {submitError ? (
+                        <p
+                          className="max-w-md text-center text-sm text-red-300"
+                          role="alert"
+                        >
+                          {submitError}
+                        </p>
+                      ) : null}
 
                       <button
                         type="submit"
