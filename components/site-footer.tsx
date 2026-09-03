@@ -70,13 +70,13 @@ export function SiteFooter() {
       <div className="mx-auto max-w-7xl px-6 py-16 md:px-10 lg:px-12 lg:py-24">
         <div className="grid gap-14 md:grid-cols-2 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-4">
-            <Link href="/" aria-label="UCSD x CRS home" className="inline-block">
+            <Link href="/" aria-label="Triton Motor Sports home" className="inline-block">
               <Image
-                src="/images/ucsd-x-crs-logo-light.png"
-                alt="UCSD x CRS"
-                width={866}
-                height={454}
-                className="h-11 w-auto object-contain md:h-12"
+                src="/images/triton-motor-sports-logo.png"
+                alt="Triton Motor Sports"
+                width={400}
+                height={400}
+                className="h-14 w-auto object-contain md:h-16"
                 unoptimized
               />
             </Link>

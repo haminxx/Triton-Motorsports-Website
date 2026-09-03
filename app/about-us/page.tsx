@@ -28,17 +28,18 @@ const orbitLeaders: OrbitStackItem[] = [
     name: "Stephanie Kovalchuk-Lum",
     role: "CogSci - Design & Interaction",
     description:
-      "Co-founded UCSD × CRS and helps shape the team’s design and interaction direction.",
+      "Co-founded UCSD × CRS and sets the direction for the collegiate racing team, mainly the engineering track.",
     accent: "#78dcca",
     initials: "SK",
-    stat: "Eight College",
+    stat: "Eighth College",
+    image: "/images/team/stephanie-kovalchuk-lum.png",
     href: "https://www.linkedin.com/in/stephaniekovalchuk-lum/",
   },
   {
     name: "Christian Lee",
     role: "CogSci - Design & Interaction",
     description:
-      "Founded UCSD × CRS and sets the direction for the collegiate racing team.",
+      "Co-founded UCSD × CRS and sets the direction for the collegiate racing team.",
     accent: "#f3f1ea",
     initials: "CL",
     stat: "Revelle College",
@@ -52,7 +53,7 @@ const orbitLeaders: OrbitStackItem[] = [
       "Guides CRS drivers and educates the team on racing principles, track craft, and the fundamentals of continuous learning on and off the track.",
     accent: "#b9a7ff",
     initials: "VP",
-    stat: "Seven College",
+    stat: "Seventh College",
   },
   emptyOrbitCard("#ff9d77"),
 ];

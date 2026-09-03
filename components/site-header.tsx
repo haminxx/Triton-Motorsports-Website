@@ -341,24 +341,15 @@ export function SiteHeader() {
             <div className="flex w-full items-center justify-between gap-10 lg:w-auto lg:gap-14">
               <Link
                 href="/"
-                aria-label="UCSD x CRS home"
+                aria-label="Triton Motor Sports home"
                 className="flex items-center"
               >
                 <Image
-                  src={
-                    light
-                      ? "/images/ucsd-x-crs-logo-dark.png"
-                      : "/images/ucsd-x-crs-logo-light.png"
-                  }
-                  alt="UCSD x CRS"
-                  width={866}
-                  height={454}
-                  className={cn(
-                    "h-8 w-auto object-contain md:h-9",
-                    light
-                      ? "brightness-[0.92] contrast-[1.08]"
-                      : "brightness-[0.96] sepia-[0.22] saturate-[0.7]",
-                  )}
+                  src="/images/triton-motor-sports-logo.png"
+                  alt="Triton Motor Sports"
+                  width={400}
+                  height={400}
+                  className="h-10 w-auto object-contain md:h-11"
                   priority
                   unoptimized
                 />
