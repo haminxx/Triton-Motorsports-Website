@@ -86,7 +86,7 @@ export function AboutSectorDock({ activeId, onSelect }: AboutSectorDockProps) {
                   onClick={() => select(sector.id)}
                   className={cn(
                     "relative flex h-14 w-80 items-center justify-between overflow-hidden rounded-r-xl border border-black/10 px-4 shadow-md transition-all duration-500 ease-out hover:shadow-lg",
-                    expanded ? "ml-[-10px]" : "ml-[-264px]",
+                    expanded ? "ml-0" : "ml-[-264px]",
                   )}
                 >
                   <div

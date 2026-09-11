@@ -137,7 +137,7 @@ function HeadingOnlySector({
       id={`about-sector-${sectorId}`}
       role="tabpanel"
       aria-labelledby={`about-tab-${sectorId}`}
-      className="relative z-0 flex min-h-[70vh] items-center justify-center px-6 pb-28 pt-32 md:pt-40"
+      className="relative z-0 flex min-h-dvh items-center justify-center px-6 pb-28 pt-32 md:pt-40"
     >
       <h1 className="max-w-5xl text-balance text-center text-4xl font-semibold tracking-tight text-[#0a1218] md:text-6xl lg:text-7xl">
         {sector.heading}
