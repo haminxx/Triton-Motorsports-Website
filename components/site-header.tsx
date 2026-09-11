@@ -12,7 +12,7 @@ import { BoldHoverText, springTransition } from "@/components/spring-underline";
 
 const menuItems = [
   { name: "Home", href: "/" },
-  { name: "About Us", href: "/about-us/" },
+  { name: "About", href: "/about-us/" },
   { name: "Program", href: "/program/" },
   { name: "Sponsors", href: "/sponsors/" },
   { name: "Recruitment", href: "/recruitment/" },

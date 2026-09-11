@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const exploreLinks = [
   { name: "Home", href: "/" },
-  { name: "About Us", href: "/about-us/" },
+  { name: "About", href: "/about-us/" },
   { name: "Program", href: "/program/" },
 ];
 

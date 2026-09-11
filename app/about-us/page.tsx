@@ -5,6 +5,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import {
+  AboutSectorDock,
+  ABOUT_SECTORS,
+  type AboutSectorId,
+} from "@/components/about-sector-dock";
+import {
   OrbitCardStack,
   type OrbitStackItem,
 } from "@/components/ui/orbit-card-stack";
@@ -119,9 +124,32 @@ function TeamProfileCard({ member }: { member: TeamMember }) {
   );
 }
 
+function HeadingOnlySector({
+  sectorId,
+}: {
+  sectorId: Exclude<AboutSectorId, "about">;
+}) {
+  const sector = ABOUT_SECTORS.find((item) => item.id === sectorId);
+  if (!sector) return null;
+
+  return (
+    <section
+      id={`about-sector-${sectorId}`}
+      role="tabpanel"
+      aria-labelledby={`about-tab-${sectorId}`}
+      className="relative z-0 flex min-h-[70vh] items-center justify-center px-6 pb-28 pt-32 md:pt-40"
+    >
+      <h1 className="max-w-5xl text-balance text-center text-4xl font-semibold tracking-tight text-[#0a1218] md:text-6xl lg:text-7xl">
+        {sector.heading}
+      </h1>
+    </section>
+  );
+}
+
 export default function AboutUsPage() {
   const [headline, setHeadline] = useState("Founder");
   const [activeFilter, setActiveFilter] = useState<TeamFilter>("Driver");
+  const [activeSector, setActiveSector] = useState<AboutSectorId>("about");
 
   const filteredMembers = teamMembers.filter(
     (member) => member.filter === activeFilter,
@@ -130,8 +158,17 @@ export default function AboutUsPage() {
   return (
     <>
       <SiteHeader />
+      <AboutSectorDock activeId={activeSector} onSelect={setActiveSector} />
       <main className="overflow-x-clip bg-[#F2F0EF] text-[#0a1218]">
-        <section className="relative z-0 px-6 pb-4 pt-32 md:pb-6 md:pt-40">
+        {activeSector !== "about" ? (
+          <HeadingOnlySector sectorId={activeSector} />
+        ) : (
+          <>
+        <section
+          id="about-sector-about"
+          role="tabpanel"
+          className="relative z-0 px-6 pb-4 pt-32 md:pb-6 md:pt-40"
+        >
           <div className="mx-auto max-w-7xl text-center">
             <div className="relative mx-auto flex min-h-[5.5rem] items-center justify-center md:min-h-[7rem]">
               <AnimatePresence mode="wait">
@@ -220,6 +257,8 @@ export default function AboutUsPage() {
           </div>
         </section>
         </PageEnter>
+          </>
+        )}
       </main>
       <SiteFooter />
     </>
