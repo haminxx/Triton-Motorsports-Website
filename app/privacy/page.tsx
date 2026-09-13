@@ -32,13 +32,12 @@ export default function PrivacyPage() {
                 1. Introduction
               </h2>
               <p className="mt-4">
-                UCSD x CRS (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;)
-                is a student-led racing and engineering organization at the
-                University of California, San Diego, competing in the Collegiate
-                Racing Series. This Privacy Policy explains how we collect, use,
-                disclose, and protect information when you visit our website,
-                use our contact and recruitment features, or access the Staff
-                Portal.
+                Triton Motorsports (&quot;we,&quot; &quot;us,&quot; or
+                &quot;our&quot;) is a student-led racing and engineering
+                organization competing in the Collegiate Racing Series. This
+                Privacy Policy explains how we collect, use, disclose, and
+                protect information when you visit our website, use our contact
+                and recruitment features, or access the Staff Portal.
               </p>
               <p className="mt-4">
                 We are committed to handling personal information responsibly
@@ -81,10 +80,9 @@ export default function PrivacyPage() {
                 </li>
                 <li>
                   <strong className="text-[#0a1218]">Staff Portal registration:</strong>{" "}
-                  UC San Diego email address (
-                  <span className="font-mono text-sm">@ucsd.edu</span>
-                  ), password (stored in hashed form where applicable), and
-                  invite code used during account creation or password recovery.
+                  Email address, password (stored in hashed form where
+                  applicable), and invite code used during account creation or
+                  password recovery.
                 </li>
                 <li>
                   <strong className="text-[#0a1218]">External applications:</strong>{" "}
@@ -163,8 +161,8 @@ export default function PrivacyPage() {
                   </Link>
                 </li>
                 <li>
-                  Comply with applicable law, university policies, and legitimate
-                  organizational record-keeping needs
+                  Comply with applicable law and legitimate organizational
+                  record-keeping needs
                 </li>
                 <li>
                   Analyze aggregated or de-identified usage trends to improve
@@ -180,15 +178,12 @@ export default function PrivacyPage() {
 
             <section>
               <h2 className="text-xl font-semibold tracking-tight text-[#0a1218]">
-                4. UC San Diego Email Requirement
+                4. Staff Portal Access
               </h2>
               <p className="mt-4">
-                Staff Portal accounts are limited to valid UC San Diego email
-                addresses. We use this requirement to verify affiliation with
-                the university community and to reduce unauthorized access to
-                internal tools. If your UC San Diego email is deactivated or you
-                are no longer affiliated with the Team, your Staff Portal
-                access may be revoked.
+                Staff Portal accounts are limited to authorized Team members
+                with a valid invite code. If you are no longer affiliated with
+                the Team, your Staff Portal access may be revoked.
               </p>
             </section>
 
@@ -212,12 +207,6 @@ export default function PrivacyPage() {
                   chat infrastructure providers that process data on our behalf
                   under contractual obligations to protect it and use it only for
                   specified services.
-                </li>
-                <li>
-                  <strong className="text-[#0a1218]">University context:</strong>{" "}
-                  As a registered student organization, certain information may
-                  be shared with UC San Diego offices when required by
-                  university policy or for official organizational registration.
                 </li>
                 <li>
                   <strong className="text-[#0a1218]">Legal and safety:</strong>{" "}
@@ -417,10 +406,9 @@ export default function PrivacyPage() {
                 For privacy questions, requests, or concerns, contact:
               </p>
               <address className="mt-4 not-italic">
-                <p className="font-medium text-[#0a1218]">UCSD x CRS — Privacy</p>
-                <p>University of California, San Diego</p>
-                <p>9500 Gilman Drive</p>
-                <p>La Jolla, CA 92093</p>
+                <p className="font-medium text-[#0a1218]">
+                  Triton Motorsports — Privacy
+                </p>
                 <p className="mt-2">
                   Email:{" "}
                   <a

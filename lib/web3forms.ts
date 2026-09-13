@@ -48,8 +48,8 @@ export async function submitContactViaWeb3Forms(
 
   const body = {
     access_key: accessKey,
-    subject: `UCSD x CRS contact — ${fullName || "New inquiry"}`,
-    from_name: "UCSD x CRS Website",
+    subject: `Triton Motorsports contact — ${fullName || "New inquiry"}`,
+    from_name: "Triton Motorsports Website",
     name: fullName,
     email: fields.email,
     replyto: fields.email,

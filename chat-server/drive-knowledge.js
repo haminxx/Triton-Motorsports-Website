@@ -5,7 +5,7 @@ const pdfParse = require("pdf-parse");
 
 const KNOWLEDGE_PATH = path.join(__dirname, "knowledge.md");
 const KNOWLEDGE_FALLBACK =
-  "UCSD × CRS is a student-led Collegiate Racing Series team at UC San Diego.";
+  "Triton Motorsports is a student-led Collegiate Racing Series team.";
 
 const MAX_KNOWLEDGE_CHARS = Number(process.env.DRIVE_KNOWLEDGE_MAX_CHARS) || 80_000;
 const CACHE_TTL_MS =

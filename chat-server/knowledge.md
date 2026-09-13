@@ -1,11 +1,11 @@
-# UCSD × CRS — Recruitment FAQ (chat knowledge base)
+# Triton Motorsports — Recruitment FAQ (chat knowledge base)
 
 Update this file when recruitment facts change, then copy it to
 `chat-server/knowledge.md` and redeploy the Render chat service.
 
 ## Organization
 
-- **Name:** UCSD × CRS (Collegiate Racing Series at UC San Diego)
+- **Name:** Triton Motorsports (Collegiate Racing Series team)
 - **What we are:** A fully structured, student-led motorsport organization —
   engineering, driving, pit crew, media, and ops working as one race team.
 - **Website:** https://ucsdxcrs.web.app

@@ -21,29 +21,14 @@ const HERO_VIDEO_SRC = '/videos/ucsdxcrs-v4.mp4'
 
 const PARTNER_LOGOS = [
     {
-        src: '/images/logos/rady-school.png',
-        alt: 'Rady School of Management',
-        className: 'h-8 w-auto max-w-[9.5rem] object-contain md:h-9 md:max-w-[11rem]',
-    },
-    {
         src: '/images/logos/mazda-motorsports.png',
         alt: 'Mazda Motorsports',
         className: 'h-9 w-auto max-w-[8.5rem] object-contain md:h-10 md:max-w-[9.5rem]',
     },
     {
-        src: '/images/logos/uc-san-diego.png',
-        alt: 'UC San Diego',
-        className: 'h-7 w-auto max-w-[11rem] object-contain md:h-8 md:max-w-[13rem]',
-    },
-    {
         src: '/images/logos/crs.png',
         alt: 'Collegiate Racing Series',
         className: 'h-11 w-auto max-w-[7.5rem] object-contain md:h-12 md:max-w-[8.5rem]',
-    },
-    {
-        src: '/images/logos/jacobs-school.png',
-        alt: 'Jacobs School of Engineering',
-        className: 'h-9 w-auto max-w-[11rem] object-contain md:h-10 md:max-w-[13rem]',
     },
 ] as const
 

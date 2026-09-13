@@ -5,11 +5,12 @@
  */
 
 const STORAGE_KEY = "ucsdxcrs_staff_accounts_v1";
+const SESSION_KEY = "triton_staff_session_v1";
 
 /** Valid invite codes staff can distribute. Remove a code after all slots are used if one-time. */
 export const STAFF_INVITE_CODES = [
   "CRS-STAFF-2026",
-  "UCSD-CRS-INVITE",
+  "TRITON-STAFF-INVITE",
   "FALL26-TEAM",
 ] as const;
 
@@ -18,6 +19,13 @@ export type StaffAccount = {
   passwordHash: string;
   inviteCode: string;
   createdAt: number;
+  provider?: "password" | "google";
+};
+
+export type StaffSession = {
+  email: string;
+  provider: "password" | "google";
+  signedInAt: number;
 };
 
 export type StaffAuthResult =
@@ -28,8 +36,12 @@ function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
 
-export function isUcsdEmail(email: string) {
-  return /^[^\s@]+@ucsd\.edu$/i.test(email.trim());
+export function isValidEmail(email: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+}
+
+export function getGoogleClientId() {
+  return process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID?.trim() ?? "";
 }
 
 async function hashPassword(password: string): Promise<string> {
@@ -56,6 +68,23 @@ function writeAccounts(accounts: StaffAccount[]) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
 }
 
+function writeSession(session: StaffSession) {
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+export function readStaffSession(): StaffSession | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as StaffSession;
+    if (!parsed?.email) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
 function isValidInviteCode(code: string) {
   const normalized = code.trim().toUpperCase();
   return STAFF_INVITE_CODES.some((c) => c.toUpperCase() === normalized);
@@ -68,8 +97,8 @@ export async function createStaffAccount(
 ): Promise<StaffAuthResult> {
   const normalizedEmail = normalizeEmail(email);
 
-  if (!isUcsdEmail(normalizedEmail)) {
-    return { ok: false, error: "Use your UCSD email (@ucsd.edu)." };
+  if (!isValidEmail(normalizedEmail)) {
+    return { ok: false, error: "Enter a valid email address." };
   }
   if (password.length < 8) {
     return { ok: false, error: "Password must be at least 8 characters." };
@@ -91,6 +120,7 @@ export async function createStaffAccount(
     passwordHash,
     inviteCode: normalizedInvite,
     createdAt: Date.now(),
+    provider: "password",
   });
   writeAccounts(accounts);
 
@@ -103,19 +133,28 @@ export async function signInStaff(
 ): Promise<StaffAuthResult & { email?: string }> {
   const normalizedEmail = normalizeEmail(email);
 
-  if (!isUcsdEmail(normalizedEmail)) {
-    return { ok: false, error: "Use your UCSD email (@ucsd.edu)." };
+  if (!isValidEmail(normalizedEmail)) {
+    return { ok: false, error: "Enter a valid email address." };
   }
 
   const account = readAccounts().find((a) => a.email === normalizedEmail);
   if (!account) {
     return { ok: false, error: "No account found for this email." };
   }
+  if (account.provider === "google" && !account.passwordHash) {
+    return { ok: false, error: "This account uses Google sign-in." };
+  }
 
   const passwordHash = await hashPassword(password);
   if (passwordHash !== account.passwordHash) {
     return { ok: false, error: "Incorrect password." };
   }
+
+  writeSession({
+    email: normalizedEmail,
+    provider: "password",
+    signedInAt: Date.now(),
+  });
 
   return { ok: true, email: normalizedEmail };
 }
@@ -127,8 +166,8 @@ export async function recoverStaffPassword(
 ): Promise<StaffAuthResult> {
   const normalizedEmail = normalizeEmail(email);
 
-  if (!isUcsdEmail(normalizedEmail)) {
-    return { ok: false, error: "Use your UCSD email (@ucsd.edu)." };
+  if (!isValidEmail(normalizedEmail)) {
+    return { ok: false, error: "Enter a valid email address." };
   }
   if (newPassword.length < 8) {
     return { ok: false, error: "New password must be at least 8 characters." };
@@ -150,8 +189,58 @@ export async function recoverStaffPassword(
   }
 
   account.passwordHash = await hashPassword(newPassword);
+  account.provider = "password";
   accounts[index] = account;
   writeAccounts(accounts);
 
   return { ok: true };
+}
+
+function parseGoogleCredentialEmail(credential: string): string | null {
+  try {
+    const payloadPart = credential.split(".")[1];
+    if (!payloadPart) return null;
+    const normalized = payloadPart.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = normalized.padEnd(
+      normalized.length + ((4 - (normalized.length % 4)) % 4),
+      "=",
+    );
+    const payload = JSON.parse(atob(padded)) as { email?: string };
+    return typeof payload.email === "string"
+      ? normalizeEmail(payload.email)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Completes Google sign-in from a GIS credential JWT. */
+export async function signInStaffWithGoogle(
+  credential: string,
+): Promise<StaffAuthResult & { email?: string }> {
+  const email = parseGoogleCredentialEmail(credential);
+  if (!email || !isValidEmail(email)) {
+    return { ok: false, error: "Google sign-in did not return a valid email." };
+  }
+
+  const accounts = readAccounts();
+  const existing = accounts.find((a) => a.email === email);
+  if (!existing) {
+    accounts.push({
+      email,
+      passwordHash: "",
+      inviteCode: "",
+      createdAt: Date.now(),
+      provider: "google",
+    });
+    writeAccounts(accounts);
+  }
+
+  writeSession({
+    email,
+    provider: "google",
+    signedInAt: Date.now(),
+  });
+
+  return { ok: true, email };
 }

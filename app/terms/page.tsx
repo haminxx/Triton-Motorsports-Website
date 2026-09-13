@@ -33,15 +33,13 @@ export default function TermsPage() {
               </h2>
               <p className="mt-4">
                 These Terms and Conditions (&quot;Terms&quot;) govern your access
-                to and use of the website operated by UCSD x CRS (the
+                to and use of the website operated by Triton Motorsports (the
                 &quot;Team,&quot; &quot;we,&quot; &quot;us,&quot; or
-                &quot;our&quot;), a student-led organization affiliated with the
-                University of California, San Diego (&quot;UC San Diego&quot;)
-                that competes in the Collegiate Racing Series (&quot;CRS&quot;).
-                By accessing or using our website at ucsdxcrs.com and any
-                related pages, tools, or services (collectively, the
-                &quot;Site&quot;), you agree to be bound by these Terms. If you
-                do not agree, you must not use the Site.
+                &quot;our&quot;), a student-led organization that competes in
+                the Collegiate Racing Series (&quot;CRS&quot;). By accessing or
+                using our website and any related pages, tools, or services
+                (collectively, the &quot;Site&quot;), you agree to be bound by
+                these Terms. If you do not agree, you must not use the Site.
               </p>
               <p className="mt-4">
                 These Terms apply to all visitors, prospective applicants,
@@ -53,18 +51,15 @@ export default function TermsPage() {
 
             <section>
               <h2 className="text-xl font-semibold tracking-tight text-[#0a1218]">
-                2. About UCSD x CRS
+                2. About Triton Motorsports
               </h2>
               <p className="mt-4">
-                UCSD x CRS is a student organization focused on collegiate
-                motorsport, engineering, operations, media, and competition
-                within the Collegiate Racing Series. The Site provides
-                information about our program, team, sponsors, recruitment,
-                contact channels, and internal staff tools. The Team operates
-                under the guidance of UC San Diego policies applicable to
-                registered student organizations, but the Site is maintained by
-                the Team and is not an official UC San Diego administrative
-                system unless expressly stated.
+                Triton Motorsports is a student organization focused on
+                collegiate motorsport, engineering, operations, media, and
+                competition within the Collegiate Racing Series. The Site
+                provides information about our program, team, sponsors,
+                recruitment, contact channels, and internal staff tools. The
+                Site is maintained by the Team.
               </p>
             </section>
 
@@ -79,16 +74,14 @@ export default function TermsPage() {
               </p>
               <ul className="mt-4 list-disc space-y-2 pl-6">
                 <li>
-                  A valid UC San Diego email address ending in{" "}
-                  <span className="font-mono text-sm">@ucsd.edu</span>
+                  A valid email address
                 </li>
                 <li>
                   A valid invite code issued by Team leadership for account
                   creation or password recovery
                 </li>
                 <li>
-                  Compliance with Team conduct standards and applicable UC San
-                  Diego student organization policies
+                  Compliance with Team conduct standards
                 </li>
               </ul>
               <p className="mt-4">
@@ -106,8 +99,8 @@ export default function TermsPage() {
               <p className="mt-4">When using the Site, you agree not to:</p>
               <ul className="mt-4 list-disc space-y-2 pl-6">
                 <li>
-                  Violate any applicable federal, state, local, or university
-                  law or regulation
+                  Violate any applicable federal, state, or local law or
+                  regulation
                 </li>
                 <li>
                   Attempt to gain unauthorized access to the Staff Portal,
@@ -119,8 +112,8 @@ export default function TermsPage() {
                   of malware
                 </li>
                 <li>
-                  Misrepresent your affiliation with UCSD x CRS, UC San Diego,
-                  or the Collegiate Racing Series
+                  Misrepresent your affiliation with Triton Motorsports or the
+                  Collegiate Racing Series
                 </li>
                 <li>
                   Upload, transmit, or distribute content that is unlawful,
@@ -150,14 +143,13 @@ export default function TermsPage() {
               <p className="mt-4">
                 The Staff Portal is an internal access point for authorized Team
                 members. It is provided on an &quot;as available&quot; basis for
-                coordination purposes and does not constitute an official UC San
-                Diego enterprise authentication system.
+                coordination purposes.
               </p>
               <h3 className="mt-6 text-lg font-medium text-[#0a1218]">
                 5.1 Account creation and recovery
               </h3>
               <p className="mt-3">
-                Staff accounts require a UC San Diego email and a valid invite
+                Staff accounts require a valid email and a valid invite
                 code distributed by Team leadership. Invite codes may be
                 rotated, revoked, or limited in scope. Password recovery also
                 requires a valid invite code. We may suspend or delete accounts
@@ -226,7 +218,7 @@ export default function TermsPage() {
               <p className="mt-4">
                 Unless otherwise noted, the Site and its content—including text,
                 graphics, logos, photographs, videos, page design, and software—are
-                owned by UCSD x CRS or used with permission and are protected by
+                owned by Triton Motorsports or used with permission and are protected by
                 copyright, trademark, and other intellectual property laws.
               </p>
               <p className="mt-4">
@@ -238,11 +230,10 @@ export default function TermsPage() {
                 commentary or news reporting).
               </p>
               <p className="mt-4">
-                &quot;UC San Diego,&quot; &quot;UCSD,&quot; &quot;Collegiate
-                Racing Series,&quot; and &quot;CRS&quot; are trademarks or
-                service marks of their respective owners. Use of those marks on
-                this Site does not imply endorsement beyond the Team&apos;s
-                stated affiliation and participation.
+                &quot;Collegiate Racing Series&quot; and &quot;CRS&quot; are
+                trademarks or service marks of their respective owners. Use of
+                those marks on this Site does not imply endorsement beyond the
+                Team&apos;s stated participation.
               </p>
             </section>
 
@@ -314,9 +305,9 @@ export default function TermsPage() {
                 11. Limitation of Liability
               </h2>
               <p className="mt-4">
-                TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, UCSD X CRS,
-                ITS MEMBERS, OFFICERS, VOLUNTEERS, AFFILIATES, AND UC SAN DIEGO
-                (TO THE EXTENT PERMITTED) WILL NOT BE LIABLE FOR ANY INDIRECT,
+                TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, TRITON
+                MOTORSPORTS, ITS MEMBERS, OFFICERS, VOLUNTEERS, AND AFFILIATES
+                WILL NOT BE LIABLE FOR ANY INDIRECT,
                 INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY, OR PUNITIVE
                 DAMAGES, OR ANY LOSS OF PROFITS, DATA, GOODWILL, OR OTHER
                 INTANGIBLE LOSSES, ARISING OUT OF OR RELATED TO YOUR USE OF OR
@@ -342,7 +333,8 @@ export default function TermsPage() {
                 12. Indemnification
               </h2>
               <p className="mt-4">
-                You agree to indemnify, defend, and hold harmless UCSD x CRS and
+                You agree to indemnify, defend, and hold harmless Triton
+                Motorsports and
                 its members, officers, and volunteers from and against any
                 claims, liabilities, damages, losses, and expenses (including
                 reasonable attorneys&apos; fees) arising out of or related to your
@@ -415,7 +407,7 @@ export default function TermsPage() {
                 the remaining provisions will remain in full force and effect.
                 These Terms, together with our Privacy Policy and any
                 feature-specific notices, constitute the entire agreement
-                between you and UCSD x CRS regarding use of the Site.
+                between you and Triton Motorsports regarding use of the Site.
               </p>
             </section>
 
@@ -427,10 +419,7 @@ export default function TermsPage() {
                 Questions about these Terms may be directed to:
               </p>
               <address className="mt-4 not-italic">
-                <p className="font-medium text-[#0a1218]">UCSD x CRS</p>
-                <p>University of California, San Diego</p>
-                <p>9500 Gilman Drive</p>
-                <p>La Jolla, CA 92093</p>
+                <p className="font-medium text-[#0a1218]">Triton Motorsports</p>
                 <p className="mt-2">
                   Email:{" "}
                   <a
