@@ -23,7 +23,7 @@ const IMPACT_STEPS: ImpactStep[] = [
     id: "culture",
     index: "01",
     title: "Student-led team culture",
-    body: "CRS at UCSD is run by students who own the season — from recruiting and training to race-day decisions. Leadership is earned on the shop floor, not handed down.",
+    body: "Triton Motorsports is run by students who own the season — from recruiting and training to race-day decisions. Leadership is earned on the shop floor, not handed down.",
     detail: "Captains, leads, and rookies share one standard: show up prepared.",
   },
   {

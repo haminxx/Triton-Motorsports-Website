@@ -81,8 +81,8 @@ export function SiteFooter() {
               />
             </Link>
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-[#F2F0EF]/60">
-              Student-led racing and engineering at UC San Diego, competing in
-              the Collegiate Racing Series.
+              Student-led racing and engineering, competing in the Collegiate
+              Racing Series.
             </p>
             <div className="mt-7 flex items-center gap-5">
               {socialLinks.map(({ name, href, icon: Icon }) => (
@@ -156,8 +156,7 @@ export function SiteFooter() {
         <div className="mt-16 border-t border-[#F2F0EF]/15 pt-8">
           <div className="flex flex-col gap-5 text-sm text-[#F2F0EF]/50 md:flex-row md:items-center md:justify-between">
             <p>
-              © 2026 University of California, San Diego x Collegiate Racing
-              Series. All rights reserved.
+              © 2026 Triton Motorsports. All rights reserved.
             </p>
             <div className="flex flex-wrap gap-6">
               <Link

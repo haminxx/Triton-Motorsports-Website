@@ -31,11 +31,6 @@ const PARTNER_LOGOS = [
         className: 'h-9 w-auto max-w-[8.5rem] object-contain md:h-10 md:max-w-[9.5rem]',
     },
     {
-        src: '/images/logos/uc-san-diego.png',
-        alt: 'UC San Diego',
-        className: 'h-7 w-auto max-w-[11rem] object-contain md:h-8 md:max-w-[13rem]',
-    },
-    {
         src: '/images/logos/crs.png',
         alt: 'Collegiate Racing Series',
         className: 'h-11 w-auto max-w-[7.5rem] object-contain md:h-12 md:max-w-[8.5rem]',

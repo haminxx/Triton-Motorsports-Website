@@ -373,7 +373,7 @@ export function RecruitmentChatModal({
                   id={titleId}
                   className="text-base font-semibold tracking-tight text-[#0a1218]"
                 >
-                  UCSD x CRS
+                  Triton Motorsports
                 </h2>
                 <p className="mt-0.5 text-xs text-black/40">
                   Ask about roles, tryouts, and how to join
@@ -395,7 +395,7 @@ export function RecruitmentChatModal({
             >
               {messages.length === 0 && !busy && !error && (
                 <p className="my-auto text-center text-sm text-black/40">
-                  Ask anything about joining UCSD × CRS — drivers, engineers,
+                  Ask anything about joining Triton Motorsports — drivers, engineers,
                   pit crew, media, and ops.
                 </p>
               )}

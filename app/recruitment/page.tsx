@@ -32,7 +32,7 @@ const TEAM_ROLES: TeamRole[] = [
     accent: "#1a3a4a",
     tagline: "Racecraft, fitness, and feedback at the limit.",
     overview:
-      "Drivers represent UCSD x CRS on track in Collegiate Racing Series events. You will train in simulators, review telemetry and session data, and work with engineers and coaches to translate setup changes into consistent lap times and clean racecraft. Competition seats are earned through preparation, fitness, licensing compliance, and demonstrated performance in practice and qualifying.",
+      "Drivers represent Triton Motorsports on track in Collegiate Racing Series events. You will train in simulators, review telemetry and session data, and work with engineers and coaches to translate setup changes into consistent lap times and clean racecraft. Competition seats are earned through preparation, fitness, licensing compliance, and demonstrated performance in practice and qualifying.",
     responsibilities: [
       "Complete simulator and on-track training sessions aligned with CRS event calendars and team development goals",
       "Review telemetry, lap data, and engineer briefings to provide actionable feedback on handling, balance, and tire behavior",
@@ -127,7 +127,7 @@ const TEAM_ROLES: TeamRole[] = [
       "Collaborate with Media Team for footage while adding narrative framing, hooks, and calls to action",
       "Track post performance and iterate on formats that drive reach, saves, and recruitment interest",
       "Maintain a content calendar aligned with recruitment cycles, events, and sponsor announcements",
-      "Write on-brand captions and hashtags that reflect UCSD x CRS voice and CRS positioning",
+      "Write on-brand captions and hashtags that reflect Triton Motorsports voice and CRS positioning",
       "Capture quick-turn behind-the-scenes moments from garage sessions, sim training, and travel days",
     ],
     idealFor:
@@ -142,7 +142,7 @@ const TEAM_ROLES: TeamRole[] = [
     accent: "#1a2a3a",
     tagline: "Schedules, budgets, and logistics that keep us racing.",
     overview:
-      "Operations keeps UCSD x CRS organized across people, time, money, and compliance. You will coordinate travel, event planning, vendor relations, and internal scheduling so engineering and competition teams can focus on performance. Clear communication and dependable follow-through are the backbone of every successful CRS weekend.",
+      "Operations keeps Triton Motorsports organized across people, time, money, and compliance. You will coordinate travel, event planning, vendor relations, and internal scheduling so engineering and competition teams can focus on performance. Clear communication and dependable follow-through are the backbone of every successful CRS weekend.",
     responsibilities: [
       "Maintain master calendars for practices, meetings, build milestones, and CRS event travel",
       "Support budget tracking, purchase requests, reimbursement workflows, and sponsor fulfillment logistics",

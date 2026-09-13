@@ -33,7 +33,7 @@ const orbitLeaders: OrbitStackItem[] = [
     name: "Stephanie Kovalchuk-Lum",
     role: "CogSci - Design & Interaction",
     description:
-      "Co-founded UCSD × CRS and sets the direction for the collegiate racing team, mainly the engineering track.",
+      "Co-founded Triton Motorsports and sets the direction for the collegiate racing team, mainly the engineering track.",
     accent: "#78dcca",
     initials: "SK",
     stat: "Eighth College",
@@ -44,7 +44,7 @@ const orbitLeaders: OrbitStackItem[] = [
     name: "Christian Lee",
     role: "CogSci - Design & Interaction",
     description:
-      "Co-founded UCSD × CRS and sets the direction for the collegiate racing team.",
+      "Co-founded Triton Motorsports and sets the direction for the collegiate racing team.",
     accent: "#f3f1ea",
     initials: "CL",
     stat: "Revelle College",
