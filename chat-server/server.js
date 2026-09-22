@@ -1,3 +1,29 @@
+const fs = require("fs");
+const path = require("path");
+
+function loadLocalEnv() {
+  const envPath = path.join(__dirname, ".env");
+  if (!fs.existsSync(envPath)) return;
+  const text = fs.readFileSync(envPath, "utf8");
+  for (const line of text.split(/\n/)) {
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eq = trimmed.indexOf("=");
+    if (eq <= 0) continue;
+    const key = trimmed.slice(0, eq).trim();
+    let value = trimmed.slice(eq + 1).trim();
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1);
+    }
+    if (key && process.env[key] == null) process.env[key] = value;
+  }
+}
+
+loadLocalEnv();
+
 const express = require("express");
 const cors = require("cors");
 const {
@@ -9,6 +35,7 @@ const {
   ALLOWED_ORIGINS,
   stripeHealth,
   checkoutHandler,
+  donateHandler,
   sessionHandler,
   webhookHandler,
 } = require("./sponsorship");
@@ -163,6 +190,7 @@ app.post(
 );
 app.use(express.json({ limit: "32kb" }));
 app.post("/api/sponsorship/checkout", checkoutHandler);
+app.post("/api/sponsorship/donate", donateHandler);
 app.get("/api/sponsorship/session", sessionHandler);
 
 app.get("/", (_req, res) => {
@@ -173,6 +201,7 @@ app.get("/", (_req, res) => {
     website: "https://ucsdxcrs.web.app/recruitment/",
     chatEndpoint: "POST /api/recruitment-chat",
     sponsorshipCheckout: "POST /api/sponsorship/checkout",
+    donationCheckout: "POST /api/sponsorship/donate",
     note: "API server only — visit the website URL above for the recruitment page.",
   });
 });

@@ -6,6 +6,7 @@ const {
   parseSponsorshipRequest,
   resolveSiteOrigin,
   checkoutParams,
+  donationCheckoutParams,
   publicStripeError,
 } = require("./sponsorship");
 
@@ -97,4 +98,20 @@ test("return origin stays on the team site", () => {
 test("public errors do not mention secret values", () => {
   const message = publicStripeError("missing_key");
   assert.equal(/sk_|rk_|whsec_/.test(message), false);
+});
+
+test("donation checkout lets Stripe collect the amount", () => {
+  const params = donationCheckoutParams("price_test", "http://localhost:3000");
+  assert.equal(params.mode, "payment");
+  assert.equal(params.submit_type, "donate");
+  assert.equal(params.metadata.purpose, "donation");
+  assert.equal(params.line_items[0].price, "price_test");
+  assert.equal("payment_method_types" in params, false);
+  assert.equal("automatic_tax" in params, false);
+  assert.equal("unit_amount" in (params.line_items[0].price_data || {}), false);
+  assert.match(params.integration_identifier, /^crs_donation_[a-z]{8}$/);
+  assert.equal(
+    params.cancel_url,
+    "http://localhost:3000/sponsors/?checkout=canceled",
+  );
 });

@@ -3,6 +3,10 @@ const Stripe = require("stripe");
 
 const MIN_AMOUNT_CENTS = 100;
 const MAX_AMOUNT_CENTS = 2_500_000;
+const DONATION_PRESET_CENTS = 2500;
+const DONATION_MAX_CENTS = 1_000_000;
+
+let donationPriceId = "";
 const DEFAULT_SITE_ORIGIN = "https://ucsdxcrs.web.app";
 
 const ALLOWED_ORIGINS = new Set([
@@ -36,12 +40,12 @@ function classifyStripeKey(key) {
   return "invalid";
 }
 
-function integrationIdentifier() {
+function integrationIdentifier(prefix = "crs_sponsorship") {
   const alphabet = "abcdefghijklmnopqrstuvwxyz";
   const bytes = crypto.randomBytes(8);
   let suffix = "";
   for (let i = 0; i < 8; i += 1) suffix += alphabet[bytes[i] % 26];
-  return `crs_sponsorship_${suffix}`;
+  return `${prefix}_${suffix}`;
 }
 
 function cleanText(value, max) {
@@ -219,6 +223,118 @@ async function createSponsorshipCheckout(body, originHeader, idempotencyKey) {
   return { status: 200, body: { url: session.url } };
 }
 
+function isTeamCheckout(session) {
+  const purpose = session?.metadata?.purpose;
+  return purpose === "sponsorship" || purpose === "donation";
+}
+
+function donationCheckoutParams(priceId, origin) {
+  return {
+    mode: "payment",
+    submit_type: "donate",
+    customer_creation: "always",
+    integration_identifier: integrationIdentifier("crs_donation"),
+    billing_address_collection: "auto",
+    invoice_creation: {
+      enabled: true,
+      invoice_data: {
+        description: "Triton Motorsports support",
+        footer: "Triton Motorsports — Collegiate Racing Series.",
+      },
+    },
+    line_items: [{ price: priceId, quantity: 1 }],
+    metadata: { purpose: "donation" },
+    success_url: `${origin}/sponsors/?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${origin}/sponsors/?checkout=canceled`,
+  };
+}
+
+async function findOrCreateDonationPrice(stripe) {
+  if (donationPriceId) return donationPriceId;
+  const configured = normalizeSecret(process.env.STRIPE_DONATION_PRICE_ID);
+  if (configured) {
+    donationPriceId = configured;
+    return donationPriceId;
+  }
+
+  const products = await stripe.products.list({ active: true, limit: 100 });
+  const existing = products.data.find(
+    (product) => product.metadata?.purpose === "donation",
+  );
+  if (existing) {
+    const prices = await stripe.prices.list({
+      product: existing.id,
+      active: true,
+      limit: 20,
+    });
+    const custom = prices.data.find((price) => price.custom_unit_amount?.enabled);
+    if (custom) {
+      donationPriceId = custom.id;
+      return donationPriceId;
+    }
+  }
+
+  const product =
+    existing ||
+    (await stripe.products.create({
+      name: "Support Triton Motorsports",
+      description: "Donation to Triton Motorsports.",
+      metadata: { purpose: "donation" },
+    }));
+
+  const price = await stripe.prices.create({
+    currency: "usd",
+    product: product.id,
+    custom_unit_amount: {
+      enabled: true,
+      minimum: MIN_AMOUNT_CENTS,
+      preset: DONATION_PRESET_CENTS,
+      maximum: DONATION_MAX_CENTS,
+    },
+    metadata: { purpose: "donation" },
+  });
+  donationPriceId = price.id;
+  return donationPriceId;
+}
+
+async function createDonationCheckout(originHeader, idempotencyKey) {
+  const stripe = getStripeClient();
+  const origin = resolveSiteOrigin(originHeader);
+  const priceId = await findOrCreateDonationPrice(stripe);
+  const params = donationCheckoutParams(priceId, origin);
+  const requestOptions = {};
+  if (
+    typeof idempotencyKey === "string" &&
+    /^[A-Za-z0-9_-]{8,255}$/.test(idempotencyKey)
+  ) {
+    requestOptions.idempotencyKey = idempotencyKey;
+  }
+
+  const session = await stripe.checkout.sessions.create(params, requestOptions);
+  if (!session.url) {
+    return { status: 502, body: { error: publicStripeError("unknown") } };
+  }
+  return { status: 200, body: { url: session.url } };
+}
+
+async function donateHandler(req, res) {
+  try {
+    const result = await createDonationCheckout(
+      req.get("origin"),
+      req.get("idempotency-key"),
+    );
+    res.status(result.status).json(result.body);
+  } catch (err) {
+    const code = err?.code || "unknown";
+    console.error(
+      "donation checkout error",
+      code,
+      err instanceof Error ? err.message.slice(0, 240) : "unknown",
+    );
+    res.status(sessionErrorStatus(err)).json({ error: publicStripeError(code) });
+  }
+}
+
 function sessionErrorStatus(err) {
   if (
     err?.code === "missing_key" ||
@@ -260,11 +376,12 @@ async function sessionHandler(req, res) {
   try {
     const stripe = getStripeClient();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    if (session.metadata?.purpose !== "sponsorship") {
+    if (!isTeamCheckout(session)) {
       res.status(404).json({ error: "Sponsorship checkout not found." });
       return;
     }
     res.status(200).json({
+      purpose: session.metadata.purpose,
       paymentStatus: session.payment_status,
       status: session.status,
       amountTotal: session.amount_total,
@@ -332,7 +449,7 @@ async function webhookHandler(req, res) {
   ]);
   if (tracked.has(event.type)) {
     const session = event.data?.object || {};
-    if (session.metadata?.purpose === "sponsorship") {
+    if (isTeamCheckout(session)) {
       console.log(
         JSON.stringify({
           source: "sponsorship-webhook",
@@ -360,9 +477,11 @@ module.exports = {
   parseSponsorshipRequest,
   resolveSiteOrigin,
   checkoutParams,
+  donationCheckoutParams,
   stripeHealth,
   publicStripeError,
   checkoutHandler,
+  donateHandler,
   sessionHandler,
   webhookHandler,
 };
