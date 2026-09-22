@@ -2,7 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { formatUsd, getSponsorshipApiOrigin } from "@/lib/sponsorship";
+import {
+  MAX_SPONSORSHIP_CENTS,
+  MIN_SPONSORSHIP_CENTS,
+  SPONSORSHIP_AMOUNTS,
+  dollarsToCents,
+  formatUsd,
+  getSponsorshipApiOrigin,
+} from "@/lib/sponsorship";
 import { cn } from "@/lib/utils";
 
 type CheckoutResult = "form" | "success" | "canceled";
@@ -17,6 +24,17 @@ type SessionStatus = {
   organization: string;
   email: string;
 };
+
+/**
+ * `fetch` rejects with a bare TypeError ("Failed to fetch") for DNS, CORS, and
+ * offline failures, which reads as a bug to anyone on the sponsors page.
+ */
+function checkoutErrorMessage(err: unknown, fallback: string): string {
+  if (err instanceof TypeError) {
+    return "Could not reach the payment server. Check your connection and try again in a moment.";
+  }
+  return err instanceof Error ? err.message : fallback;
+}
 
 function newIdempotencyKey() {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -41,6 +59,13 @@ export function SponsorshipCheckout() {
   const [session, setSession] = useState<SessionStatus | null>(null);
   const [sessionError, setSessionError] = useState<string | null>(null);
   const [sessionLoading, setSessionLoading] = useState(false);
+  const [formOpen, setFormOpen] = useState(false);
+  const [tier, setTier] = useState<string>(SPONSORSHIP_AMOUNTS[0].id);
+  const [customAmount, setCustomAmount] = useState("");
+  const [sponsorName, setSponsorName] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [email, setEmail] = useState("");
+  const [note, setNote] = useState("");
 
   useEffect(() => {
     if (result !== "success" || !sessionId) {
@@ -79,7 +104,7 @@ export function SponsorshipCheckout() {
       .catch((err: unknown) => {
         if (err instanceof DOMException && err.name === "AbortError") return;
         setSessionError(
-          err instanceof Error ? err.message : "Could not confirm this payment.",
+          checkoutErrorMessage(err, "Could not confirm this payment."),
         );
       })
       .finally(() => {
@@ -114,8 +139,68 @@ export function SponsorshipCheckout() {
       window.location.assign(data.url);
     } catch (err) {
       setSubmitting(false);
+      setError(checkoutErrorMessage(err, "Could not open the donation page."));
+    }
+  }
+
+  function resolveAmountCents(): number | null {
+    if (tier !== "custom") {
+      const preset = SPONSORSHIP_AMOUNTS.find((option) => option.id === tier);
+      return preset ? preset.cents : null;
+    }
+    return dollarsToCents(customAmount);
+  }
+
+  async function startSponsorship(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+
+    const amountCents = resolveAmountCents();
+    if (
+      amountCents == null ||
+      amountCents < MIN_SPONSORSHIP_CENTS ||
+      amountCents > MAX_SPONSORSHIP_CENTS
+    ) {
       setError(
-        err instanceof Error ? err.message : "Could not open the donation page.",
+        `Enter an amount between ${formatUsd(MIN_SPONSORSHIP_CENTS)} and ${formatUsd(
+          MAX_SPONSORSHIP_CENTS,
+        )}.`,
+      );
+      return;
+    }
+
+    setSubmitting(true);
+    try {
+      const response = await fetch(
+        `${getSponsorshipApiOrigin()}/api/sponsorship/checkout`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Idempotency-Key": newIdempotencyKey(),
+          },
+          body: JSON.stringify({
+            sponsorName: sponsorName.trim(),
+            organization: organization.trim(),
+            email: email.trim(),
+            note: note.trim(),
+            tier,
+            amountCents,
+          }),
+        },
+      );
+      const data = (await response.json().catch(() => ({}))) as {
+        url?: string;
+        error?: string;
+      };
+      if (!response.ok || !data.url) {
+        throw new Error(data.error || "Could not open the sponsorship page.");
+      }
+      window.location.assign(data.url);
+    } catch (err) {
+      setSubmitting(false);
+      setError(
+        checkoutErrorMessage(err, "Could not open the sponsorship page."),
       );
     }
   }
@@ -167,8 +252,20 @@ export function SponsorshipCheckout() {
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col items-center">
       <div className="flex flex-col items-center gap-3 sm:flex-row">
-        <button type="button" className={cn(buttonClass, "border border-[#182B49] bg-white/80 text-[#182B49] hover:bg-white")}>
-          Become our sponsor
+        <button
+          type="button"
+          onClick={() => {
+            setError(null);
+            setFormOpen((open) => !open);
+          }}
+          aria-expanded={formOpen}
+          aria-controls="sponsorship-form"
+          className={cn(
+            buttonClass,
+            "border border-[#182B49] bg-white/80 text-[#182B49] hover:bg-white",
+          )}
+        >
+          {formOpen ? "Hide sponsorship form" : "Become our sponsor"}
         </button>
         <button
           type="button"
@@ -179,12 +276,172 @@ export function SponsorshipCheckout() {
           {submitting ? "Opening Stripe…" : "Support us!"}
         </button>
       </div>
+
+      {formOpen && (
+        <form
+          id="sponsorship-form"
+          onSubmit={startSponsorship}
+          className="mt-8 w-full rounded-[28px] border border-black/10 bg-white/80 p-6 text-left shadow-[0_24px_80px_rgba(24,43,73,0.08)] backdrop-blur-md md:p-8"
+        >
+          <h2 className="text-xl font-semibold tracking-tight text-[#182B49]">
+            Sponsor Triton Motorsports
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-black/55">
+            Choose an amount and we will hand you off to Stripe to finish
+            securely. You will get an emailed receipt and invoice.
+          </p>
+
+          <fieldset className="mt-6">
+            <legend className="text-xs font-semibold uppercase tracking-[0.16em] text-black/45">
+              Amount
+            </legend>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {SPONSORSHIP_AMOUNTS.map((option) => (
+                <button
+                  key={option.id}
+                  type="button"
+                  onClick={() => setTier(option.id)}
+                  aria-pressed={tier === option.id}
+                  className={cn(
+                    "rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors",
+                    tier === option.id
+                      ? "border-[#182B49] bg-[#182B49] text-[#F2F0EF]"
+                      : "border-black/15 bg-white/70 text-[#182B49] hover:border-[#182B49]/50",
+                  )}
+                >
+                  {option.label}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setTier("custom")}
+                aria-pressed={tier === "custom"}
+                className={cn(
+                  "rounded-full border px-5 py-2.5 text-sm font-semibold transition-colors",
+                  tier === "custom"
+                    ? "border-[#182B49] bg-[#182B49] text-[#F2F0EF]"
+                    : "border-black/15 bg-white/70 text-[#182B49] hover:border-[#182B49]/50",
+                )}
+              >
+                Custom
+              </button>
+            </div>
+            {tier === "custom" && (
+              <label className="mt-3 block">
+                <span className="sr-only">Custom amount in US dollars</span>
+                <div className="relative">
+                  <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-black/45">
+                    $
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={customAmount}
+                    onChange={(changeEvent) =>
+                      setCustomAmount(changeEvent.target.value)
+                    }
+                    placeholder="1500"
+                    className={fieldClass("pl-8")}
+                  />
+                </div>
+              </label>
+            )}
+          </fieldset>
+
+          <div className="mt-6 grid gap-4 sm:grid-cols-2">
+            <Field label="Your name" required>
+              <input
+                type="text"
+                required
+                maxLength={80}
+                autoComplete="name"
+                value={sponsorName}
+                onChange={(changeEvent) =>
+                  setSponsorName(changeEvent.target.value)
+                }
+                className={fieldClass()}
+              />
+            </Field>
+            <Field label="Email" required>
+              <input
+                type="email"
+                required
+                maxLength={254}
+                autoComplete="email"
+                value={email}
+                onChange={(changeEvent) => setEmail(changeEvent.target.value)}
+                className={fieldClass()}
+              />
+            </Field>
+            <Field label="Company or organization">
+              <input
+                type="text"
+                maxLength={120}
+                autoComplete="organization"
+                value={organization}
+                onChange={(changeEvent) =>
+                  setOrganization(changeEvent.target.value)
+                }
+                className={fieldClass()}
+              />
+            </Field>
+            <Field label="Note to the team">
+              <input
+                type="text"
+                maxLength={240}
+                value={note}
+                onChange={(changeEvent) => setNote(changeEvent.target.value)}
+                className={fieldClass()}
+              />
+            </Field>
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className={cn(
+              buttonClass,
+              "mt-6 w-full bg-[#182B49] text-[#F2F0EF] hover:bg-[#121f38] sm:w-auto",
+            )}
+          >
+            {submitting ? "Opening Stripe…" : "Continue to Stripe"}
+          </button>
+        </form>
+      )}
+
       {error && (
         <p className="mt-4 text-center text-sm text-red-700" role="alert">
           {error}
         </p>
       )}
     </div>
+  );
+}
+
+function fieldClass(extra?: string) {
+  return cn(
+    "w-full rounded-2xl border border-black/15 bg-white/70 px-4 py-3 text-sm text-[#0a1218] outline-none transition-colors placeholder:text-black/35 focus:border-[#182B49]",
+    extra,
+  );
+}
+
+function Field({
+  label,
+  required,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <label className="block">
+      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.16em] text-black/45">
+        {label}
+        {required && <span aria-hidden="true"> *</span>}
+      </span>
+      {children}
+    </label>
   );
 }
 
