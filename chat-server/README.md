@@ -155,11 +155,49 @@ Check sync status: `http://localhost:10000/health`
 | `knowledgeTruncated: true` | Large PDF — trim source doc or raise `DRIVE_KNOWLEDGE_MAX_CHARS` |
 | Slow first reply | Render free tier cold start — retry once |
 
+## Sponsorship checkout (Stripe)
+
+The Sponsors page sends people to Stripe-hosted Checkout. The secret key stays on this server. The static website never sees it.
+
+Sandbox keys cannot pay out to a real Chase account. Test mode uses simulated payments. Add the nonprofit EIN and the Chase account in the Stripe Dashboard when you activate live mode:
+
+1. [Stripe Dashboard](https://dashboard.stripe.com) → switch to **Test mode** while using `sk_test_` / `rk_test_` keys.
+2. **Settings → Business** → legal name and EIN of the nonprofit organization.
+3. **Settings → Bank accounts and scheduling** → add the Chase account. Use a test bank account in test mode. Add the real Chase account only after the account is activated for live payments.
+4. Sponsorship charges land in the Stripe balance, then Stripe pays that balance out to the Chase account on your payout schedule.
+
+### Where to paste keys
+
+| Key | Paste it here | Do not paste it here |
+| --- | --- | --- |
+| Secret or restricted key (`sk_test_…` or `rk_test_…`) | `chat-server/.env` on `STRIPE_SECRET_KEY=` for local runs, and Render → **ucsd-x-crs-website** → **Environment** → `STRIPE_SECRET_KEY` for the live site | Next.js `.env.local`, GitHub, the Sponsors page |
+| Publishable key (`pk_test_…`) | Project-root `.env.local` on `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=` | The chat server. This hosted Checkout flow does not read it. |
+| Webhook signing secret (`whsec_…`) | `chat-server/.env` and Render as `STRIPE_WEBHOOK_SECRET` | The website |
+
+Prefer a restricted key (`rk_test_`) with **Checkout Sessions: Write** and **Checkout Sessions: Read**. Add **Invoices: Write** if receipt creation returns a permissions error.
+
+```bash
+cd chat-server
+cp .env.example .env
+# Paste the secret key on the STRIPE_SECRET_KEY line, then:
+npm install
+npm test
+npm start
+```
+
+For local website testing, set `NEXT_PUBLIC_SPONSORSHIP_API_URL=http://localhost:10000` in the project-root `.env.local`, then run `npm run dev` from the repo root.
+
+Webhook endpoint (after the server is deployed): `https://ucsd-x-crs-website.onrender.com/api/sponsorship/webhook`
+
+Listen for `checkout.session.completed`, `checkout.session.async_payment_succeeded`, and `checkout.session.async_payment_failed`.
+
+Leave `STRIPE_ALLOW_LIVE=false` until you are ready to accept real sponsorships with a live key.
+
 ## Security
 
-| Store here | OpenAI key? | Google credentials? |
-| --- | --- | --- |
-| GitHub | No | No |
-| `NEXT_PUBLIC_*` | No | No |
-| Render Environment | **Yes** | **Yes** |
-| Public chat API URL | OK (endpoint only) | No |
+| Store here | OpenAI key? | Google credentials? | Stripe secret? |
+| --- | --- | --- | --- |
+| GitHub | No | No | No |
+| `NEXT_PUBLIC_*` | No | No | No (publishable key only, and this flow does not use it) |
+| Render Environment | **Yes** | **Yes** | **Yes** |
+| Public chat API URL | OK (endpoint only) | No | No |

@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { PageEnter } from "@/components/page-motion";
 
-const LAST_UPDATED = "July 10, 2026";
+const LAST_UPDATED = "September 22, 2026";
 
 export default function PrivacyPage() {
   return (
@@ -37,7 +37,8 @@ export default function PrivacyPage() {
                 organization competing in the Collegiate Racing Series. This
                 Privacy Policy explains how we collect, use, disclose, and
                 protect information when you visit our website, use our contact
-                and recruitment features, or access the Staff Portal.
+                and recruitment features, sponsor the team through Stripe
+                Checkout, or access the Staff Portal.
               </p>
               <p className="mt-4">
                 We are committed to handling personal information responsibly
@@ -70,6 +71,14 @@ export default function PrivacyPage() {
                   content, and any optional details you include in our contact
                   form (for example, sponsorship interest or project
                   descriptions).
+                </li>
+                <li>
+                  <strong className="text-[#0a1218]">Sponsorship checkout:</strong>{" "}
+                  Name, email address, optional organization, optional note, and
+                  sponsorship amount. Card numbers and bank details are entered
+                  on Stripe&apos;s checkout page, not on this Site. We receive
+                  payment status, amount, and receipt details from Stripe. We
+                  do not store full card numbers.
                 </li>
                 <li>
                   <strong className="text-[#0a1218]">Recruitment chat and inquiries:</strong>{" "}
@@ -124,11 +133,13 @@ export default function PrivacyPage() {
                 2.3 Information we do not intentionally collect
               </h3>
               <p className="mt-3">
-                We do not knowingly collect Social Security numbers, financial
-                account credentials, precise geolocation for tracking purposes,
-                or sensitive health information through the Site. Please do not
-                submit sensitive personal information through contact forms or
-                chat unless we specifically request it for a defined purpose.
+                We do not knowingly collect Social Security numbers, full payment
+                card numbers, or bank account numbers through the Site. Card
+                and bank details for sponsorship checkout are entered on Stripe.
+                We also do not knowingly collect precise geolocation for tracking
+                purposes or sensitive health information. Please do not submit
+                sensitive personal information through contact forms or chat
+                unless we specifically request it for a defined purpose.
               </p>
             </section>
 
@@ -141,6 +152,10 @@ export default function PrivacyPage() {
                 <li>Operate, maintain, and improve the Site and its features</li>
                 <li>
                   Respond to contact, sponsorship, and general inquiry messages
+                </li>
+                <li>
+                  Process sponsorship payments through Stripe and keep a record
+                  of the sponsor name, organization, amount, and payment status
                 </li>
                 <li>
                   Answer recruitment questions and direct prospective members
@@ -376,10 +391,12 @@ export default function PrivacyPage() {
               </h2>
               <p className="mt-4">
                 Our Site may link to Instagram, LinkedIn, external application
-                platforms, sponsor websites, CRS resources, and other third-party
-                services. We are not responsible for the privacy practices of
-                those services. We encourage you to review the privacy policies
-                of any third-party site you visit.
+                platforms, sponsor websites, CRS resources, Stripe Checkout, and
+                other third-party services. Sponsorship card payments are
+                processed by Stripe under its own privacy policy. We are not
+                responsible for the privacy practices of third-party services.
+                We encourage you to review the privacy policies of any
+                third-party site you visit.
               </p>
             </section>
 

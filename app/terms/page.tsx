@@ -6,7 +6,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { BlurFade } from "@/components/ui/blur-fade";
 import { PageEnter } from "@/components/page-motion";
 
-const LAST_UPDATED = "July 10, 2026";
+const LAST_UPDATED = "September 22, 2026";
 
 export default function TermsPage() {
   return (
@@ -249,6 +249,15 @@ export default function TermsPage() {
                 us a non-exclusive license to use submissions for responding to
                 your inquiry, evaluating recruitment interest, managing sponsor
                 relationships, and operating the Site.
+              </p>
+              <p className="mt-4">
+                Sponsorship payments on the Sponsors page are processed by
+                Stripe. By continuing to checkout you agree to pay the amount
+                shown. Completing a payment does not by itself create a
+                tax-deductible charitable contribution, a naming right, or logo
+                placement unless the Team confirms that separately in writing.
+                You can cancel before paying. Refunds, if any, are issued by
+                the Team through Stripe.
               </p>
               <p className="mt-4">
                 Do not submit confidential trade secrets, sensitive personal data

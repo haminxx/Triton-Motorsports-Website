@@ -6,7 +6,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "test": "node --test sponsorship.test.js"
   },
   "engines": {
     "node": ">=18"
@@ -15,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "googleapis": "^144.0.0",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "stripe": "^22.4.0"
   }
 }

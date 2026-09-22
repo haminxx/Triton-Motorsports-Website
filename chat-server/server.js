@@ -5,6 +5,13 @@ const {
   getKnowledge,
   getHealthFields,
 } = require("./drive-knowledge");
+const {
+  ALLOWED_ORIGINS,
+  stripeHealth,
+  checkoutHandler,
+  sessionHandler,
+  webhookHandler,
+} = require("./sponsorship");
 
 const PORT = Number(process.env.PORT) || 10000;
 
@@ -31,13 +38,6 @@ function openAiKeyLooksValid(key) {
 const OPENAI_API_KEY = normalizeApiKey(process.env.OPENAI_API_KEY);
 const OPENAI_MODEL =
   process.env.OPENAI_MODEL?.trim() || "gpt-4o-mini";
-
-const ALLOWED_ORIGINS = new Set([
-  "https://ucsdxcrs.web.app",
-  "https://ucsdxcrs.firebaseapp.com",
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-]);
 
 function buildSystemPrompt(knowledge) {
   return [
@@ -156,7 +156,14 @@ app.use(
     methods: ["GET", "POST", "OPTIONS"],
   }),
 );
+app.post(
+  "/api/sponsorship/webhook",
+  express.raw({ type: "application/json" }),
+  webhookHandler,
+);
 app.use(express.json({ limit: "32kb" }));
+app.post("/api/sponsorship/checkout", checkoutHandler);
+app.get("/api/sponsorship/session", sessionHandler);
 
 app.get("/", (_req, res) => {
   res.json({
@@ -165,6 +172,7 @@ app.get("/", (_req, res) => {
     provider: "openai",
     website: "https://ucsdxcrs.web.app/recruitment/",
     chatEndpoint: "POST /api/recruitment-chat",
+    sponsorshipCheckout: "POST /api/sponsorship/checkout",
     note: "API server only — visit the website URL above for the recruitment page.",
   });
 });
@@ -177,6 +185,7 @@ app.get("/health", (_req, res) => {
     keyFormatValid: openAiKeyLooksValid(OPENAI_API_KEY),
     model: OPENAI_MODEL,
     ...getHealthFields(),
+    ...stripeHealth(),
   });
 });
 
