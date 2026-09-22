@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { PageTheme } from "@/components/page-theme";
+import { SITE_URL } from "@/lib/site";
 import "./globals.css";
 
-const SITE_URL = "https://ucsdxcrs.web.app";
 const SITE_TITLE = "Triton Motorsports";
 const SITE_DESCRIPTION =
   "Triton Motorsports — official racing team, partnered with Collegiate Racing Series for hands-on motorsports education.";
@@ -84,13 +84,6 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
-        <link
-          rel="preload"
-          href="/videos/ucsdxcrs-v4.mp4"
-          as="video"
-          type="video/mp4"
-          fetchPriority="high"
-        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
