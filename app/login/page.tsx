@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BackgroundAutoplayVideo } from "@/components/background-autoplay-video";
 import { SiteHeader } from "@/components/site-header";
-import { PageEnter } from "@/components/page-motion";
 import { StaffAuthPanel } from "@/components/staff-auth-panel";
 
 export default function LoginPage() {
@@ -29,8 +28,8 @@ export default function LoginPage() {
   return (
     <>
       <SiteHeader />
-      <main className="relative flex min-h-screen items-center justify-center overflow-hidden px-6 pb-16 pt-28 text-[#F2F0EF] md:pt-32">
-        <div className="absolute inset-0 overflow-hidden" aria-hidden>
+      <main className="relative flex min-h-dvh flex-col items-center justify-[safe_center] px-4 py-24 text-[#F2F0EF] sm:px-6 sm:py-28">
+        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
           <div
             className="absolute inset-[-8%] will-change-transform transition-transform duration-500 ease-out"
             style={{
@@ -42,13 +41,12 @@ export default function LoginPage() {
               className="size-full object-cover"
             />
           </div>
-          <div className="absolute inset-0 bg-black/45 backdrop-blur-[6px]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/55" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30" />
         </div>
 
-        <PageEnter className="relative z-10 w-full max-w-md">
+        <div className="relative z-10 w-full max-w-sm">
           <StaffAuthPanel />
-        </PageEnter>
+        </div>
       </main>
     </>
   );

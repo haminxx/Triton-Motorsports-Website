@@ -213,7 +213,7 @@ function MobileNav({
   );
 }
 
-/** Staff Portal button — navy fill with cream label. Bold weight on hover (box size fixed). */
+/** Member Login button — navy fill with cream label. Bold weight on hover (box size fixed). */
 function StaffPortalButton({
   className,
   light,
@@ -239,7 +239,7 @@ function StaffPortalButton({
       )}
     >
       <BoldHoverText active={hovered} from={500} to={800}>
-        Staff Portal
+        Member Login
       </BoldHoverText>
     </Link>
   );
