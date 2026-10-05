@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import type { FormEvent, ReactNode, SVGProps } from "react";
 
 export type MemberSignInMode = "signin" | "register" | "recovery";
@@ -63,10 +62,7 @@ function Field({
   return <div className="w-full">{children}</div>;
 }
 
-/**
- * Glass member-login card. The outer wrapper stays transparent so a page-level
- * background video remains visible; blur lives on the card only.
- */
+/** Member login form. Fields sit on the page background; this wrapper has no panel. */
 export function MemberSignIn({
   mode,
   email,
@@ -103,21 +99,8 @@ export function MemberSignIn({
 
   return (
     <div className="relative z-10 flex w-full flex-col items-center bg-transparent">
-      <div className="relative z-10 flex w-full max-w-sm flex-col items-center rounded-3xl border border-white/25 bg-[linear-gradient(145deg,rgba(255,255,255,0.18),rgba(18,18,18,0.22))] p-6 shadow-2xl shadow-black/30 backdrop-blur-xl sm:p-8">
-        <div className="mb-6 flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-white/20 shadow-lg">
-          <Image
-            src="/images/triton-motor-sports-logo.png"
-            alt=""
-            width={36}
-            height={36}
-            className="h-8 w-8 object-contain"
-            unoptimized
-          />
-        </div>
+      <div className="relative z-10 flex w-full max-w-sm flex-col items-center">
         <h2 className="mb-6 text-center text-2xl font-semibold text-white">
-          <span className="mb-2 block text-xs font-medium uppercase tracking-[0.16em] text-white/60">
-            Triton Motorsports
-          </span>
           {title}
         </h2>
 
@@ -250,13 +233,6 @@ export function MemberSignIn({
             ) : null}
           </div>
         </form>
-      </div>
-
-      <div className="relative z-10 mt-8 flex flex-col items-center px-2 text-center sm:mt-12">
-        <p className="text-sm text-white/70 drop-shadow-[0_1px_8px_rgba(0,0,0,0.65)]">
-          Join <span className="font-medium text-white">the crew</span> building
-          Triton Motorsports.
-        </p>
       </div>
     </div>
   );

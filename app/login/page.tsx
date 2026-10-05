@@ -41,7 +41,8 @@ export default function LoginPage() {
               className="size-full object-cover"
             />
           </div>
-          <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/30" />
+          <div className="absolute inset-0 bg-black/45 backdrop-blur-[6px]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/35 via-transparent to-black/55" />
         </div>
 
         <div className="relative z-10 w-full max-w-sm">
